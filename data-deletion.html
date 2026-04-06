@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xóa Dữ Liệu Người Dùng — AIContenter</title>
+    <meta name="description" content="Hướng dẫn xóa dữ liệu người dùng khỏi ứng dụng AIContenter. User Data Deletion Instructions.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-dark: #0f1123;
+            --bg-mid: #171a33;
+            --bg-surface: #1e2140;
+            --accent-purple: #8c5cff;
+            --accent-cyan: #4dc0ff;
+            --accent-pink: #e566cc;
+            --accent-green: #34d399;
+            --accent-red: #f87171;
+            --accent-orange: #f59e0b;
+            --text-primary: #f0f0ff;
+            --text-secondary: rgba(240, 240, 255, 0.65);
+            --text-tertiary: rgba(240, 240, 255, 0.35);
+            --border: rgba(255, 255, 255, 0.08);
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+
+        /* Nav */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(15, 17, 35, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 0;
+        }
+        .nav-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 20px;
+            font-weight: 900;
+            text-decoration: none;
+        }
+        .nav-logo .ai {
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-logo .name { color: var(--text-primary); }
+        .nav-links { display: flex; gap: 24px; }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text-primary); }
+        .nav-links a.active { color: var(--accent-red); }
+
+        /* Content */
+        .content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 24px 100px;
+        }
+        .page-header {
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+        }
+        .page-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid rgba(248, 113, 113, 0.25);
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--accent-red);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+        .page-header h1 {
+            font-size: clamp(32px, 4vw, 44px);
+            font-weight: 900;
+            margin-bottom: 12px;
+        }
+        .page-header .subtitle {
+            font-size: 17px;
+            color: var(--text-secondary);
+            max-width: 600px;
+        }
+
+        /* Intro */
+        .intro-box {
+            background: rgba(77, 192, 255, 0.06);
+            border: 1px solid rgba(77, 192, 255, 0.15);
+            border-radius: 16px;
+            padding: 24px 28px;
+            margin-bottom: 48px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+        .intro-box .icon {
+            font-size: 28px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .intro-box p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+        .intro-box strong {
+            color: var(--text-primary);
+        }
+
+        /* Methods */
+        .method-section {
+            margin-bottom: 48px;
+        }
+        .method-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+        .method-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 900;
+            flex-shrink: 0;
+        }
+        .method-header h2 {
+            font-size: 22px;
+            font-weight: 800;
+        }
+        .method-header .tag {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        /* Steps */
+        .steps-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .step-card {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            background: rgba(30, 33, 64, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px 24px;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+        .step-card:hover {
+            border-color: rgba(140, 92, 255, 0.3);
+            transform: translateX(4px);
+        }
+        .step-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 800;
+            flex-shrink: 0;
+            color: white;
+        }
+        .step-content h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .step-content p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        .step-content .path {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(140, 92, 255, 0.1);
+            border: 1px solid rgba(140, 92, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent-purple);
+            margin-top: 8px;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+        }
+        .step-content .path .arrow {
+            color: var(--text-tertiary);
+        }
+
+        /* Warning box */
+        .warning-box {
+            background: rgba(248, 113, 113, 0.06);
+            border: 1px solid rgba(248, 113, 113, 0.2);
+            border-radius: 14px;
+            padding: 20px 24px;
+            margin: 16px 0;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        .warning-box .icon { font-size: 20px; flex-shrink: 0; }
+        .warning-box p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        .warning-box strong { color: var(--accent-red); }
+
+        /* Data table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .data-table th,
+        .data-table td {
+            text-align: left;
+            padding: 14px 18px;
+            font-size: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+        .data-table th {
+            background: var(--bg-surface);
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .data-table td {
+            color: var(--text-secondary);
+            background: rgba(30, 33, 64, 0.3);
+        }
+        .data-table tr:last-child td { border-bottom: none; }
+        .badge-deleted {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(248, 113, 113, 0.12);
+            color: var(--accent-red);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 6px;
+        }
+        .badge-cleared {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(245, 158, 11, 0.12);
+            color: var(--accent-orange);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 6px;
+        }
+        .badge-revoked {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(140, 92, 255, 0.12);
+            color: var(--accent-purple);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 6px;
+        }
+
+        /* Success box */
+        .success-box {
+            background: rgba(52, 211, 153, 0.06);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+            border-radius: 14px;
+            padding: 20px 24px;
+            margin: 16px 0;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        .success-box .icon { font-size: 20px; flex-shrink: 0; }
+        .success-box p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        .success-box strong { color: var(--accent-green); }
+
+        /* Contact section */
+        .contact-section {
+            margin-top: 48px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+        }
+        .contact-section h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .contact-card {
+            background: rgba(140, 92, 255, 0.06);
+            border: 1px solid rgba(140, 92, 255, 0.15);
+            border-radius: 16px;
+            padding: 24px 28px;
+        }
+        .contact-card p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        .contact-card p:last-child { margin-bottom: 0; }
+        .contact-card strong { color: var(--text-primary); }
+        .contact-card a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .contact-card a:hover { text-decoration: underline; }
+
+        /* Divider */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+            margin: 48px 0;
+        }
+
+        /* Footer */
+        footer {
+            padding: 32px 0;
+            border-top: 1px solid var(--border);
+        }
+        .footer-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .footer-links { display: flex; gap: 24px; }
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .footer-links a:hover { color: var(--accent-cyan); }
+        .footer-copy { font-size: 13px; color: var(--text-tertiary); }
+
+        @media (max-width: 600px) {
+            .intro-box { flex-direction: column; gap: 12px; }
+            .footer-inner { flex-direction: column; text-align: center; }
+            .step-card { flex-direction: column; gap: 12px; }
+            .data-table th, .data-table td { padding: 10px 12px; font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">
+                <span class="ai">AI</span><span class="name">Contenter</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="terms.html">Terms</a>
+                <a href="privacy.html">Privacy</a>
+                <a href="data-deletion.html" class="active">Data Deletion</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="content">
+        <div class="page-header">
+            <div class="page-badge">🗑️ Data Deletion</div>
+            <h1>Xóa Dữ Liệu Người Dùng</h1>
+            <p class="subtitle">Hướng dẫn chi tiết cách xóa tất cả dữ liệu cá nhân của bạn khỏi ứng dụng AIContenter.</p>
+        </div>
+
+        <div class="intro-box">
+            <span class="icon">ℹ️</span>
+            <div>
+                <p><strong>AIContenter tôn trọng quyền riêng tư của bạn.</strong> Bạn có toàn quyền kiểm soát dữ liệu cá nhân của mình. Dưới đây là các cách để xóa dữ liệu và hủy liên kết tài khoản Facebook khỏi ứng dụng.</p>
+                <p style="margin-top: 8px;">AIContenter respects your privacy. You have full control over your personal data. Below are the methods to delete your data and unlink your Facebook account from the app.</p>
+            </div>
+        </div>
+
+        <!-- Method 1: In-App -->
+        <div class="method-section">
+            <div class="method-header">
+                <div class="method-number" style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));">1</div>
+                <div>
+                    <h2>Xóa Trong Ứng Dụng</h2>
+                    <span class="tag" style="background: rgba(52,211,153,0.12); color: var(--accent-green);">Khuyến nghị / Recommended</span>
+                </div>
+            </div>
+
+            <div class="steps-list">
+                <div class="step-card">
+                    <div class="step-num" style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));">1</div>
+                    <div class="step-content">
+                        <h3>Mở ứng dụng AIContenter</h3>
+                        <p>Khởi động ứng dụng AIContenter trên thiết bị iOS của bạn và đảm bảo bạn đã đăng nhập.</p>
+                        <p style="color: var(--text-tertiary); font-size: 13px; margin-top: 4px;">Open the AIContenter app on your iOS device and make sure you are logged in.</p>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-num" style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));">2</div>
+                    <div class="step-content">
+                        <h3>Vào phần Cài Đặt</h3>
+                        <p>Nhấn vào tab <strong>Settings</strong> (⚙️) ở thanh điều hướng bên dưới màn hình.</p>
+                        <p style="color: var(--text-tertiary); font-size: 13px; margin-top: 4px;">Tap the Settings (⚙️) tab in the bottom navigation bar.</p>
+                        <div class="path">Settings <span class="arrow">→</span> Account</div>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-num" style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));">3</div>
+                    <div class="step-content">
+                        <h3>Chọn "Xóa Tài Khoản"</h3>
+                        <p>Cuộn xuống và nhấn vào nút <strong>"Delete Account"</strong> (Xóa Tài Khoản) màu đỏ.</p>
+                        <p style="color: var(--text-tertiary); font-size: 13px; margin-top: 4px;">Scroll down and tap the red "Delete Account" button.</p>
+                        <div class="path">Settings <span class="arrow">→</span> Account <span class="arrow">→</span> Delete Account</div>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-num" style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));">4</div>
+                    <div class="step-content">
+                        <h3>Xác nhận xóa dữ liệu</h3>
+                        <p>Một hộp thoại xác nhận sẽ xuất hiện. Nhấn <strong>"Confirm Delete"</strong> để hoàn tất. Tất cả dữ liệu sẽ được xóa ngay lập tức và bạn sẽ được đăng xuất.</p>
+                        <p style="color: var(--text-tertiary); font-size: 13px; margin-top: 4px;">A confirmation dialog will appear. Tap "Confirm Delete" to complete. All data will be deleted immediately and you will be logged out.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <span class="icon">✅</span>
+                <p><strong>Hoàn tất!</strong> Tất cả dữ liệu cá nhân, token đăng nhập, và quyền truy cập Facebook sẽ được xóa khỏi ứng dụng và thiết bị của bạn ngay lập tức.</p>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Method 2: Facebook Settings -->
+        <div class="method-section">
+            <div class="method-header">
+                <div class="method-number" style="background: linear-gradient(135deg, #1877f2, #42a5f5);">2</div>
+                <div>
+                    <h2>Xóa Qua Cài Đặt Facebook</h2>
+                    <span class="tag" style="background: rgba(24,119,242,0.12); color: #42a5f5;">Qua Facebook</span>
+                </div>
+            </div>
+
+            <p style="font-size: 15px; color: var(--text-secondary); margin-bottom: 20px;">Bạn có thể thu hồi quyền truy cập của AIContenter trực tiếp từ cài đặt Facebook:</p>
+            <p style="font-size: 13px; color: var(--text-tertiary); margin-bottom: 20px;">You can revoke AIContenter's access directly from your Facebook settings:</p>
+
+            <div class="steps-list">
+                <div class="step-card">
+                    <div class="step-num" style="background: #1877f2;">1</div>
+                    <div class="step-content">
+                        <h3>Mở Cài Đặt Facebook</h3>
+                        <p>Truy cập <a href="https://www.facebook.com/settings" target="_blank" style="color: var(--accent-cyan); text-decoration: none; font-weight: 600;">facebook.com/settings</a> hoặc mở ứng dụng Facebook → Menu → Settings & Privacy → Settings.</p>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-num" style="background: #1877f2;">2</div>
+                    <div class="step-content">
+                        <h3>Vào "Apps and Websites"</h3>
+                        <p>Trong phần <strong>Security</strong>, chọn <strong>"Apps and Websites"</strong> (Ứng dụng và Trang web).</p>
+                        <div class="path">Settings <span class="arrow">→</span> Security <span class="arrow">→</span> Apps and Websites</div>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-num" style="background: #1877f2;">3</div>
+                    <div class="step-content">
+                        <h3>Tìm "AIContenter"</h3>
+                        <p>Tìm ứng dụng <strong>AIContenter</strong> trong danh sách các ứng dụng đã kết nối.</p>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-num" style="background: #1877f2;">4</div>
+                    <div class="step-content">
+                        <h3>Nhấn "Remove" (Xóa)</h3>
+                        <p>Chọn AIContenter → Nhấn <strong>"Remove"</strong>. Tích chọn <strong>"Delete all posts, photos, and videos on Facebook that AIContenter may have posted on your behalf"</strong> nếu muốn xóa tất cả nội dung đã đăng.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <span class="icon">⚠️</span>
+                <p><strong>Lưu ý:</strong> Sau khi xóa qua Facebook, ứng dụng AIContenter sẽ mất quyền truy cập tài khoản của bạn. Bạn sẽ cần đăng nhập lại nếu muốn sử dụng lại ứng dụng.</p>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Method 3: Email -->
+        <div class="method-section">
+            <div class="method-header">
+                <div class="method-number" style="background: linear-gradient(135deg, var(--accent-pink), var(--accent-orange));">3</div>
+                <div>
+                    <h2>Yêu Cầu Xóa Qua Email</h2>
+                    <span class="tag" style="background: rgba(229,102,204,0.12); color: var(--accent-pink);">Hỗ trợ thủ công</span>
+                </div>
+            </div>
+
+            <p style="font-size: 15px; color: var(--text-secondary); margin-bottom: 20px;">Nếu không thể truy cập ứng dụng hoặc cài đặt Facebook, bạn có thể gửi yêu cầu xóa dữ liệu qua email:</p>
+
+            <div class="steps-list">
+                <div class="step-card">
+                    <div class="step-num" style="background: linear-gradient(135deg, var(--accent-pink), var(--accent-orange));">1</div>
+                    <div class="step-content">
+                        <h3>Gửi email yêu cầu xóa dữ liệu</h3>
+                        <p>Gửi email tới <a href="mailto:support@aicontenter.app" style="color: var(--accent-cyan); text-decoration: none; font-weight: 600;">support@aicontenter.app</a> với tiêu đề: <strong>"Yêu cầu xóa dữ liệu / Data Deletion Request"</strong></p>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-num" style="background: linear-gradient(135deg, var(--accent-pink), var(--accent-orange));">2</div>
+                    <div class="step-content">
+                        <h3>Cung cấp thông tin xác minh</h3>
+                        <p>Trong email, vui lòng cung cấp:</p>
+                        <ul style="margin-top: 8px; padding-left: 16px; color: var(--text-secondary); font-size: 14px;">
+                            <li>Tên tài khoản Facebook của bạn</li>
+                            <li>Địa chỉ email liên kết với tài khoản</li>
+                            <li>Facebook User ID (nếu có)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-num" style="background: linear-gradient(135deg, var(--accent-pink), var(--accent-orange));">3</div>
+                    <div class="step-content">
+                        <h3>Chờ xác nhận</h3>
+                        <p>Chúng tôi sẽ xử lý yêu cầu và xóa toàn bộ dữ liệu của bạn trong vòng <strong>48 giờ</strong>. Bạn sẽ nhận được email xác nhận khi hoàn tất.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Data Deleted -->
+        <div class="method-section">
+            <div class="method-header">
+                <div class="method-number" style="background: linear-gradient(135deg, var(--accent-red), var(--accent-orange));">📋</div>
+                <h2>Dữ Liệu Được Xóa</h2>
+            </div>
+
+            <p style="font-size: 15px; color: var(--text-secondary); margin-bottom: 8px;">Khi bạn yêu cầu xóa dữ liệu, các thông tin sau sẽ được xử lý:</p>
+            <p style="font-size: 13px; color: var(--text-tertiary); margin-bottom: 16px;">When you request data deletion, the following information will be processed:</p>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Loại Dữ Liệu / Data Type</th>
+                        <th>Hành Động / Action</th>
+                        <th>Thời Gian / Timeframe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Facebook Access Token</td>
+                        <td><span class="badge-revoked">🔓 Thu hồi / Revoked</span></td>
+                        <td>Ngay lập tức / Immediate</td>
+                    </tr>
+                    <tr>
+                        <td>Thông tin hồ sơ / Profile info</td>
+                        <td><span class="badge-deleted">🗑️ Xóa / Deleted</span></td>
+                        <td>Ngay lập tức / Immediate</td>
+                    </tr>
+                    <tr>
+                        <td>Danh sách Page / Pages list</td>
+                        <td><span class="badge-cleared">🧹 Xóa cache / Cleared</span></td>
+                        <td>Ngay lập tức / Immediate</td>
+                    </tr>
+                    <tr>
+                        <td>Bài viết nháp / Draft posts</td>
+                        <td><span class="badge-deleted">🗑️ Xóa / Deleted</span></td>
+                        <td>Ngay lập tức / Immediate</td>
+                    </tr>
+                    <tr>
+                        <td>Lịch đăng bài / Schedule data</td>
+                        <td><span class="badge-deleted">🗑️ Xóa / Deleted</span></td>
+                        <td>Ngay lập tức / Immediate</td>
+                    </tr>
+                    <tr>
+                        <td>Keychain data</td>
+                        <td><span class="badge-deleted">🗑️ Xóa / Deleted</span></td>
+                        <td>Ngay lập tức / Immediate</td>
+                    </tr>
+                    <tr>
+                        <td>Dữ liệu phân tích (ẩn danh) / Analytics (anonymized)</td>
+                        <td><span class="badge-cleared">🧹 Xóa / Cleared</span></td>
+                        <td>Trong 30 ngày / Within 30 days</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="success-box">
+                <span class="icon">🛡️</span>
+                <p><strong>Cam kết bảo mật:</strong> AIContenter không lưu trữ dữ liệu người dùng trên server. Tất cả dữ liệu được lưu cục bộ trên thiết bị của bạn và sẽ được xóa hoàn toàn khi bạn xóa tài khoản hoặc gỡ ứng dụng.</p>
+            </div>
+
+            <div class="success-box" style="border-color: rgba(77,192,255,0.2); background: rgba(77,192,255,0.04);">
+                <span class="icon">💡</span>
+                <p><strong>Mẹo:</strong> Gỡ cài đặt ứng dụng AIContenter khỏi thiết bị cũng sẽ xóa toàn bộ dữ liệu cục bộ được lưu trữ bởi ứng dụng. / Uninstalling AIContenter from your device will also remove all locally stored data.</p>
+            </div>
+        </div>
+
+        <!-- Contact -->
+        <div class="contact-section">
+            <h2>📬 Liên Hệ Hỗ Trợ / Contact Support</h2>
+            <div class="contact-card">
+                <p>Nếu bạn có bất kỳ câu hỏi nào về việc xóa dữ liệu, vui lòng liên hệ:</p>
+                <p style="margin-top: 4px; color: var(--text-tertiary); font-size: 13px;">If you have any questions about data deletion, please contact:</p>
+                <p style="margin-top: 12px;"><strong>Email:</strong> <a href="mailto:support@aicontenter.app">support@aicontenter.app</a></p>
+                <p><strong>Thời gian phản hồi / Response time:</strong> Trong vòng 48 giờ / Within 48 hours</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-inner">
+            <a href="index.html" class="nav-logo">
+                <span class="ai">AI</span><span class="name">Contenter</span>
+            </a>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="terms.html">Terms of Use</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="data-deletion.html">Data Deletion</a>
+            </div>
+            <div class="footer-copy">© 2025 AIContenter. All rights reserved.</div>
+        </div>
+    </footer>
+</body>
+</html>
